@@ -9,7 +9,9 @@ RUTA_DATOS = Path(__file__).parent.parent / "data" / "datos_panaderia.csv"
 
 def cargar_datos(ruta: Path = RUTA_DATOS) -> pd.DataFrame:
     """Carga el CSV y valida lo mínimo."""
-    df = pd.read_csv(ruta)
+    df = pd.read_csv(ruta,
+    encoding="latin-1",
+    sep=";")
 
     # El reflejo profesional: verificar tipos apenas se carga.
     columnas_esperadas = {"fecha", "dia_semana", "temperatura_c", "precio_promedio", "ventas_unidades"}

@@ -11,7 +11,6 @@ print("cargando datos...")
 def entrenar():
     df = cargar_datos()
     print("datos cargados:", len(df), "filas")
-    X, y = separar_variables(df)
 
     # resumen de ventas por dia de la semana
     resumen = pd.DataFrame()
@@ -31,6 +30,7 @@ def entrenar():
             df["es_finde"][i] = 1
 
     # entrenar el modelo
+    X, y = separar_variables(df)
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     modelo = LinearRegression()
