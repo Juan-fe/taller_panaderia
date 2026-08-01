@@ -5,35 +5,40 @@ from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error
 
+from data import cargar_datos, separar_variables
+
 print("cargando datos...")
-df = pd.read_csv("data/datos_panaderia.csv")
-print("datos cargados:", len(df), "filas")
+def entrenar():
+    df = cargar_datos()
+    print("datos cargados:", len(df), "filas")
+    X, y = separar_variables(df)
 
-# resumen de ventas por dia de la semana
-resumen = pd.DataFrame()
-for dia in df["dia_semana"].unique():
-    sub = df[df["dia_semana"] == dia]
-    resumen = resumen.append(
-        {"dia": dia, "ventas_promedio": sub["ventas_unidades"].mean()},
-        ignore_index=True,
-    )
-print("--- resumen por dia ---")
-print(resumen)
+    # resumen de ventas por dia de la semana
+    resumen = pd.DataFrame()
+    for dia in df["dia_semana"].unique():
+        sub = df[df["dia_semana"] == dia]
+        resumen = resumen.append(
+            {"dia": dia, "ventas_promedio": sub["ventas_unidades"].mean()},
+            ignore_index=True,
+        )
+    print("--- resumen por dia ---")
+    print(resumen)
 
-# variable: es fin de semana?
-df["es_finde"] = 0
-for i in range(len(df)):
-    if df["dia_semana"][i] == "sábado" or df["dia_semana"][i] == "domingo":
-        df["es_finde"][i] = 1
+    # variable: es fin de semana?
+    df["es_finde"] = 0
+    for i in range(len(df)):
+        if df["dia_semana"][i] == "sábado" or df["dia_semana"][i] == "domingo":
+            df["es_finde"][i] = 1
 
-# entrenar el modelo
-X = df[["temperatura_c", "precio_promedio", "es_finde"]]
-y = df["ventas_unidades"]
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    # entrenar el modelo
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-modelo = LinearRegression()
-modelo.fit(X_train, y_train)
+    modelo = LinearRegression()
+    modelo.fit(X_train, y_train)
 
-pred = modelo.predict(X_test)
-print("MAE:", mean_absolute_error(y_test, pred))
-print("listo!!")
+    pred = modelo.predict(X_test)
+    print("MAE:", mean_absolute_error(y_test, pred))
+    print("listo!!")
+
+if __name__ == "__main__":
+    entrenar()
