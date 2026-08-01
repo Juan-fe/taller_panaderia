@@ -21,11 +21,14 @@ def cargar_datos(ruta: Path = RUTA_DATOS) -> pd.DataFrame:
     
     # Imputación de la mediana para valores SIN DATO en la variable temperatura
     print(df.info())
-    print(df.isna().sum())
+    print("\nFilas con valores nulos:\n",df.isna().sum(),"\n")
 
-    for columna in df.columns:
-        print(f"\n--- {columna} ---")
-        print(df[columna].value_counts(dropna=False).head(20))
+    resumen = pd.DataFrame({
+        "columna": df.columns,
+        "sin_dato": [(df[c].astype(str) == "SIN DATO").sum() for c in df.columns]
+    })
+
+    print("Cantidad de filas con valores 'SIN DATO'\n", resumen, "\n")
 
     # Convertir textos no numéricos a NaN
     df["temperatura_c"] = pd.to_numeric(
