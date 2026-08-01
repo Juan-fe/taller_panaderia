@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error
 
 print("cargando datos...")
-df = pd.read_csv("C:\\Users\\practicante\\Desktop\\proyecto_panaderia\\datos_panaderia.csv")
+df = pd.read_csv("data/datos_panaderia.csv")
 print("datos cargados:", len(df), "filas")
 
 # resumen de ventas por dia de la semana
