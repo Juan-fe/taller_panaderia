@@ -18,6 +18,27 @@ def cargar_datos(ruta: Path = RUTA_DATOS) -> pd.DataFrame:
     faltantes = columnas_esperadas - set(df.columns)
     if faltantes:
         raise ValueError(f"Faltan columnas en el CSV: {faltantes}")
+    
+    # Imputación de la mediana para valores SIN DATO en la variable temperatura
+    print(df.info())
+    print(df.isna().sum())
+
+    for columna in df.columns:
+        print(f"\n--- {columna} ---")
+        print(df[columna].value_counts(dropna=False).head(20))
+
+    # Convertir textos no numéricos a NaN
+    df["temperatura_c"] = pd.to_numeric(
+        df["temperatura_c"],
+        errors="coerce"
+    )
+
+    # Calcular la mediana sin considerar los NaN
+    mediana_temperatura = df["temperatura_c"].median()
+
+    # Imputar los valores faltantes
+    df["temperatura_c"] = df["temperatura_c"].fillna(mediana_temperatura)    
+
 
     return df
 
